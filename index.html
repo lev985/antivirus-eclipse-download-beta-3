@@ -116,6 +116,15 @@
     border:1px solid var(--border); border-radius:10px; padding:14px}
   #dlConfirm{width:100%; justify-content:center; margin-top:20px}
   #dlConfirm:disabled{background:#d9d1ee; cursor:not-allowed}
+
+  /* модалка инструкции */
+  .insmodal{width:min(580px,100%); max-height:86vh; overflow-y:auto}
+  .inssteps{margin-top:16px; padding-left:22px; display:grid; gap:11px}
+  .inssteps li{font-size:14px; color:var(--text); line-height:1.55}
+  .inssteps li b{color:var(--accent)}
+  .insvideo-wrap{margin-top:20px; position:relative; width:100%; padding-bottom:56.25%;
+    border-radius:12px; overflow:hidden; background:#000}
+  .insvideo-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
 </style>
 
 <!-- ===== ШАПКА ===== -->
@@ -191,7 +200,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4a2 2 0 0 1 2-2h8l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
           <span data-i18n="guide_btn">Не понял? Посмотреть инструкцию</span>
         </button>
-        <p class="soon" id="guideSoon" data-i18n="guide_soon" hidden>📄 Текстовая инструкция и 🎥 видео скоро появятся здесь.</p>
       </div>
     </div>
   </div>
@@ -225,6 +233,18 @@
   </div>
 </div>
 
+<!-- ===== МОДАЛКА ИНСТРУКЦИИ ===== -->
+<div id="insModal" class="overlay" hidden>
+  <div class="modal insmodal">
+    <button id="insClose" class="mclose" type="button" aria-label="Закрыть">&times;</button>
+    <h3 data-i18n="ins_h">Как установить и запустить Eclipse</h3>
+    <ol class="inssteps" data-i18n="ins_steps"><li><b>Скачайте</b> Eclipse.zip — нажмите «Скачать», поставьте галочку согласия, и кнопка станет активной.</li><li><b>Распакуйте</b> архив — правой кнопкой по Eclipse.zip → «Извлечь всё…» → «Извлечь». Не запускайте прямо из архива.</li><li><b>Запустите</b> — откройте папку Eclipse и дважды кликните по Eclipse.exe.</li><li><b>Если Windows предупредит</b> — нажмите «Подробнее» → «Выполнить в любом случае» (это нормально для беты без подписи).</li><li>(по желанию) Ярлык на рабочий стол: правой кнопкой по Eclipse.exe → «Отправить» → «Рабочий стол (создать ярлык)».</li><li>(по желанию) ИИ-помощник: установите Ollama — при первом открытии чата Eclipse сам скачает модель.</li></ol>
+    <div class="insvideo-wrap" id="insVideo">
+      <iframe src="https://www.youtube-nocookie.com/embed/hlN3_PSf9Gg" title="Eclipse — видеоинструкция" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
 <script>
   // ===== Переводы =====
   var T = {
@@ -248,6 +268,9 @@
       need_note: "Ollama — официальная и бесплатная программа, скачивается напрямую с сайта разработчика.",
       guide_btn: "Не понял? Посмотреть инструкцию",
       guide_soon: "📄 Текстовая инструкция и 🎥 видео скоро появятся здесь.",
+      ins_h: "Как установить и запустить Eclipse",
+      ins_steps: '<li><b>Скачайте</b> Eclipse.zip — нажмите «Скачать», поставьте галочку согласия, и кнопка станет активной.</li><li><b>Распакуйте</b> архив — правой кнопкой по Eclipse.zip → «Извлечь всё…» → «Извлечь». Не запускайте прямо из архива.</li><li><b>Запустите</b> — откройте папку Eclipse и дважды кликните по Eclipse.exe.</li><li><b>Если Windows предупредит</b> — нажмите «Подробнее» → «Выполнить в любом случае» (это нормально для беты без подписи).</li><li>(по желанию) Ярлык на рабочий стол: правой кнопкой по Eclipse.exe → «Отправить» → «Рабочий стол (создать ярлык)».</li><li>(по желанию) ИИ-помощник: установите Ollama — при первом открытии чата Eclipse сам скачает модель.</li>',
+      ins_video_soon: "🎥 Видеоинструкция скоро появится здесь.",
       legal_h: "Пользовательское соглашение",
       legal_intro: "Скачивая и используя Eclipse, вы принимаете условия ниже.",
       legal_list: '<li>Eclipse — бесплатная бета-версия. Программа предоставляется «как есть», без каких-либо гарантий; в бете возможны ошибки и сбои.</li><li>Это бета-версия, а не замена профессиональному антивирусу — не полагайтесь на неё как на единственную защиту компьютера.</li><li>Мы не гарантируем обнаружение всех угроз и не гарантируем полную конфиденциальность ваших данных.</li><li>Разработчик не несёт ответственности за возможную потерю данных, ущерб или иные последствия использования программы. Вы используете её на свой страх и риск.</li><li>Бета-версия распространяется бесплатно, исходный код открыт.</li>',
@@ -279,6 +302,9 @@
       need_note: "Ollama is an official, free program and downloads directly from its developer's site.",
       guide_btn: "Not sure how? See the guide",
       guide_soon: "📄 A text guide and 🎥 video will appear here soon.",
+      ins_h: "How to install and run Eclipse",
+      ins_steps: '<li><b>Download</b> Eclipse.zip — click &quot;Download&quot;, tick the consent box, and the button becomes active.</li><li><b>Unzip</b> the archive — right-click Eclipse.zip → &quot;Extract All…&quot; → &quot;Extract&quot;. Don&#39;t run it straight from the archive.</li><li><b>Run it</b> — open the Eclipse folder and double-click Eclipse.exe.</li><li><b>If Windows warns you</b> — click &quot;More info&quot; → &quot;Run anyway&quot; (normal for an unsigned beta).</li><li>(optional) Desktop shortcut: right-click Eclipse.exe → &quot;Send to&quot; → &quot;Desktop (create shortcut)&quot;.</li><li>(optional) AI assistant: install Ollama — the first time you open the chat, Eclipse downloads the model itself.</li>',
+      ins_video_soon: "🎥 Video guide coming soon.",
       legal_h: "Terms of Use",
       legal_intro: "By downloading and using Eclipse, you accept the terms below.",
       legal_list: '<li>Eclipse is a free beta. The software is provided &quot;as is&quot;, without any warranties; bugs and failures are possible in a beta.</li><li>This is a beta, not a replacement for a professional antivirus — do not rely on it as your computer&#39;s only protection.</li><li>We do not guarantee detection of all threats, and we do not guarantee full confidentiality of your data.</li><li>The developer is not liable for any data loss, damage, or other consequences of using the software. You use it at your own risk.</li><li>The beta is free and the source code is open.</li>',
@@ -320,11 +346,11 @@
   try{ start = localStorage.getItem('eclipse_lang') || 'ru'; }catch(e){}
   setLang(start);
 
-  // кнопка «Не понял?»
-  document.getElementById('guideBtn').addEventListener('click', function(){
-    var s = document.getElementById('guideSoon');
-    s.hidden = !s.hidden;
-  });
+  // кнопка «Не понял?» — открывает модалку с инструкцией
+  var insModal = document.getElementById('insModal');
+  document.getElementById('guideBtn').addEventListener('click', function(){ insModal.hidden = false; });
+  document.getElementById('insClose').addEventListener('click', function(){ insModal.hidden = true; });
+  insModal.addEventListener('click', function(e){ if(e.target === insModal){ insModal.hidden = true; } });
 
   // ===== Модальное окно скачивания =====
   var ECLIPSE_URL = "https://github.com/lev985/antivirus-eclipse-download-beta-2/raw/main/Eclipse.zip";
