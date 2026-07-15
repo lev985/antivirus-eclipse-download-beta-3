@@ -159,17 +159,42 @@
   </div>
 </section>
 
+<style>
+  .dlbox{position:relative}
+  .verpick{position:absolute; top:14px; right:14px; z-index:5}
+  .verbtn{display:inline-flex; align-items:center; gap:6px; background:var(--tint); border:1px solid var(--border); border-radius:9px; padding:7px 11px; color:var(--text); font:inherit; font-size:.88rem; font-weight:600; cursor:pointer}
+  .verbtn svg{width:13px; height:13px; stroke:var(--muted)}
+  .vermenu{position:absolute; top:calc(100% + 6px); right:0; min-width:132px; background:#fff; border:1px solid var(--border); border-radius:10px; padding:5px; box-shadow:0 12px 30px rgba(60,40,140,.15)}
+  .vermenu button{display:block; width:100%; text-align:left; background:none; border:0; color:var(--text); font:inherit; font-size:.92rem; padding:8px 11px; border-radius:7px; cursor:pointer}
+  .vermenu button:hover{background:var(--tint)}
+  .vermenu button.active{background:#f0eafe; color:var(--accent); font-weight:700}
+  .alphadiff{margin:16px auto 0; max-width:560px; text-align:left; background:#f6f2ff; border:1px solid #e2d7fb; border-radius:12px; padding:14px 16px; font-size:.95rem; line-height:1.55; color:var(--text)}
+  .alphadiff b{color:var(--accent)}
+</style>
+
 <!-- ===== СКАЧАТЬ ===== -->
 <section class="download">
   <div class="wrap">
     <div class="dlbox">
+      <div class="verpick" id="verPick">
+        <button class="verbtn" id="verBtn" type="button" aria-label="Версия">
+          <span id="verLabel">Альфа</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="vermenu" id="verMenu" hidden>
+          <button type="button" data-ver="alpha">Альфа</button>
+          <button type="button" data-ver="beta">Бета</button>
+        </div>
+      </div>
       <h2 data-i18n="dl_h2">Скачать EclipseAV</h2>
-      <p class="sub" data-i18n="dl_sub">Бесплатная бета-версия для Windows 10 и 11.</p>
-      <div class="meta" data-i18n="dl_meta"><span>Версия: <b>beta</b></span><span>Размер: <b>~22 МБ</b></span><span>Windows <b>10 / 11</b></span><span><b>Бесплатно</b></span></div>
+      <p class="sub" data-i18n="dl_sub">Бесплатно, для Windows 10 и 11.</p>
+      <div class="meta"><span>Версия: <b>alpha</b></span><span>Размер: <b>~81 МБ</b></span><span>Windows <b>10 / 11</b></span><span><b>Бесплатно</b></span></div>
+      <p class="dlcount" id="dlCountLine" style="margin:16px 0 2px;font-weight:600;font-size:1.05rem" hidden>👀 <b id="viewCount">—</b> <span data-i18n="dl_views">посетили</span> &nbsp;·&nbsp; 🔥 <b id="dlCount">—</b> <span data-i18n="dl_count">скачали</span></p>
       <button class="btn pri big" id="openDl" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
-        <span data-i18n="dl_btn">Скачать Eclipse.zip</span>
+        <span id="dlBtnText">Скачать EclipseAV Alpha.zip</span>
       </button>
+      <div class="alphadiff" id="alphaDiff" data-i18n="alpha_diff"><b>Чем альфа отличается от беты:</b> мощный ИИ-детектор EMBER2024 (обучен на реальных вирусах 2024 года — в бете его нет), новый тёмный интерфейс, «Защищённый DNS» (шифрование DNS-запросов), выбор ИИ-модели и режимы производительности. Больше по размеру (81 МБ против 22) из-за ИИ-библиотек. Ранняя альфа — возможны ошибки.</div>
       <p class="ok" data-i18n="dl_ok">✅ Распакуйте архив и запустите <b>Eclipse.exe</b> — больше ничего устанавливать не нужно, всё уже внутри.</p>
       <p class="warn" data-i18n="dl_warn"><b>Windows может предупредить</b> при запуске — это самосборка без цифровой подписи (нормально для беты). Нажмите «Подробнее» → «Выполнить в любом случае».</p>
     </div>
@@ -220,7 +245,7 @@
   <div class="modal">
     <button id="modalClose" class="mclose" type="button" aria-label="Закрыть">&times;</button>
     <h3 data-i18n="md_h">Скачивание EclipseAV</h3>
-    <p class="msub" data-i18n="md_sub">Eclipse.zip · ~22 МБ · бесплатно</p>
+    <p class="msub" id="mdSub">EclipseAV Alpha.zip · ~81 МБ · бесплатно</p>
     <div class="mcheck">
       <input type="checkbox" id="agree">
       <span><label for="agree" data-i18n="md_check">Я ознакомился и принимаю</label> <a href="#" id="policyLink" data-i18n="md_link">политику конфиденциальности</a></span>
@@ -255,11 +280,14 @@
       hero_small: "Это бета-версия — пока не замена профессиональному антивирусу. Код открытый, программа бесплатная.",
       shots_h2: "Как выглядит программа",
       dl_h2: "Скачать EclipseAV",
-      dl_sub: "Бесплатная бета-версия для Windows 10 и 11.",
+      dl_sub: "Бесплатно, для Windows 10 и 11.",
+      alpha_diff: '<b>Чем альфа отличается от беты:</b> мощный ИИ-детектор EMBER2024 (обучен на реальных вирусах 2024 года — в бете его нет), новый тёмный интерфейс, «Защищённый DNS» (шифрование DNS-запросов), выбор ИИ-модели и режимы производительности. Больше по размеру (81 МБ против 22) из-за ИИ-библиотек. Ранняя альфа — возможны ошибки.',
       dl_meta: '<span>Версия: <b>beta</b></span><span>Размер: <b>~22 МБ</b></span><span>Windows <b>10 / 11</b></span><span><b>Бесплатно</b></span>',
       dl_btn: "Скачать Eclipse.zip",
+      dl_views: "посетили",
+      dl_count: "скачали",
       dl_ok: '✅ Распакуйте архив и запустите <b>Eclipse.exe</b> — больше ничего устанавливать не нужно, всё уже внутри.',
-      dl_warn: '<b>Windows может предупредить</b> при запуске — это самосборка без цифровой подписи (нормально для беты). Нажмите «Подробнее» → «Выполнить в любом случае».',
+      dl_warn: '<b>Windows может предупредить</b> при запуске — сборка без цифровой подписи (нормально для беты/альфы). Нажмите «Подробнее» → «Выполнить в любом случае».',
       need_h2: "ИИ-помощник — по желанию",
       need_lead: "Сам антивирус работает сразу после распаковки. Хотите ещё и встроенного ИИ-помощника? Установите бесплатную программу Ollama — при первом открытии чата EclipseAV сам скачает ИИ-модель (~2 ГБ, один раз), и дальше она работает офлайн, прямо на вашем компьютере.",
       app2_name: "Ollama",
@@ -289,11 +317,14 @@
       hero_small: "This is a beta — not yet a replacement for a professional antivirus. Open source and free.",
       shots_h2: "What it looks like",
       dl_h2: "Download EclipseAV",
-      dl_sub: "Free beta for Windows 10 and 11.",
+      dl_sub: "Free, for Windows 10 and 11.",
+      alpha_diff: '<b>How the alpha differs from the beta:</b> a powerful EMBER2024 AI detector (trained on real 2024 viruses — not in the beta), a new dark interface, "Secure DNS" (encrypted DNS requests), AI-model choice and performance modes. Larger in size (81 MB vs 22) due to the AI libraries. Early alpha — bugs are possible.',
       dl_meta: '<span>Version: <b>beta</b></span><span>Size: <b>~22 MB</b></span><span>Windows <b>10 / 11</b></span><span><b>Free</b></span>',
       dl_btn: "Download Eclipse.zip",
+      dl_views: "visited",
+      dl_count: "downloaded",
       dl_ok: '✅ Unzip the archive and run <b>Eclipse.exe</b> — nothing else to install, everything is already inside.',
-      dl_warn: '<b>Windows may show a warning</b> on launch — the app is not code-signed yet (normal for a beta). Click <b>More info</b> → <b>Run anyway</b>.',
+      dl_warn: '<b>Windows may show a warning</b> on launch — the build is not code-signed (normal for a beta/alpha). Click <b>More info</b> → <b>Run anyway</b>.',
       need_h2: "AI assistant — optional",
       need_lead: "The antivirus works right after you unzip it. Want the built-in AI assistant too? Install the free Ollama app — the first time you open the chat, EclipseAV downloads the AI model itself (~2 GB, one-time), and then it works offline, right on your computer.",
       app2_name: "Ollama",
@@ -336,6 +367,7 @@
       btns[j].classList.toggle('active', btns[j].getAttribute('data-lang') === lang);
     }
     try{ localStorage.setItem('eclipse_lang', lang); }catch(e){}
+    if(typeof applyVersion === 'function') applyVersion();
   }
 
   var lbtns = document.querySelectorAll('.langbtn');
@@ -363,8 +395,10 @@
   agree.addEventListener('change', function(){ dlConfirm.disabled = !agree.checked; });
   dlConfirm.addEventListener('click', function(){
     if(dlConfirm.disabled) return;
+    countDownload();                       // засчитать скачивание (один раз на браузер)
+    var v = (typeof VERS !== 'undefined' && VERS[curVer]) ? VERS[curVer] : {url: ECLIPSE_URL, file: 'Eclipse.zip'};
     var a = document.createElement('a');
-    a.href = ECLIPSE_URL; a.download = 'Eclipse.zip';
+    a.href = v.url; a.download = v.file;
     document.body.appendChild(a); a.click(); a.remove();
     dlModal.hidden = true;
   });
@@ -373,4 +407,64 @@
     var p = document.getElementById('policyText');
     p.hidden = !p.hidden;
   });
+
+  // ===== Выбор версии (Альфа по умолчанию / Бета) =====
+  var VERS = {
+    alpha: { url: "https://github.com/lev985/EclipseAV-Alpha-/releases/download/EclipseAv/EclipseAV.Alpha.zip",
+             file: "EclipseAV Alpha.zip", word: "alpha", size_ru: "~81 МБ", size_en: "~81 MB",
+             lab_ru: "Альфа", lab_en: "Alpha", isAlpha: true },
+    beta:  { url: ECLIPSE_URL, file: "Eclipse.zip", word: "beta", size_ru: "~22 МБ", size_en: "~22 MB",
+             lab_ru: "Бета", lab_en: "Beta", isAlpha: false }
+  };
+  var curVer = 'alpha';
+  function applyVersion(){
+    if(typeof VERS === 'undefined' || !VERS) return;
+    var v = VERS[curVer], en = (document.documentElement.lang === 'en');
+    var vl = document.getElementById('verLabel'); if(vl) vl.textContent = en ? v.lab_en : v.lab_ru;
+    var meta = document.querySelector('.download .meta');
+    if(meta){ meta.innerHTML = en
+      ? '<span>Version: <b>'+v.word+'</b></span><span>Size: <b>'+v.size_en+'</b></span><span>Windows <b>10 / 11</b></span><span><b>Free</b></span>'
+      : '<span>Версия: <b>'+v.word+'</b></span><span>Размер: <b>'+v.size_ru+'</b></span><span>Windows <b>10 / 11</b></span><span><b>Бесплатно</b></span>'; }
+    var db = document.getElementById('dlBtnText'); if(db) db.textContent = (en?'Download ':'Скачать ') + v.file;
+    var ms = document.getElementById('mdSub'); if(ms) ms.textContent = v.file + ' · ' + (en?v.size_en:v.size_ru) + ' · ' + (en?'free':'бесплатно');
+    var note = document.getElementById('alphaDiff'); if(note) note.hidden = !v.isAlpha;
+    var oa = document.querySelector('#verMenu [data-ver="alpha"]'); if(oa){ oa.textContent = en?'Alpha':'Альфа'; oa.classList.toggle('active', curVer==='alpha'); }
+    var ob = document.querySelector('#verMenu [data-ver="beta"]'); if(ob){ ob.textContent = en?'Beta':'Бета'; ob.classList.toggle('active', curVer==='beta'); }
+  }
+  (function(){
+    var vb = document.getElementById('verBtn'), vm = document.getElementById('verMenu');
+    if(vb && vm){
+      vb.addEventListener('click', function(e){ e.stopPropagation(); vm.hidden = !vm.hidden; });
+      document.addEventListener('click', function(){ vm.hidden = true; });
+      var opts = vm.querySelectorAll('[data-ver]');
+      for(var i=0;i<opts.length;i++){
+        opts[i].addEventListener('click', function(e){ e.stopPropagation(); curVer = this.getAttribute('data-ver'); vm.hidden = true; applyVersion(); });
+      }
+    }
+    applyVersion();
+  })();
+
+  // ===== Счётчики Abacus (бесплатно): посещения + скачивания. РАЗНЫЕ — один раз на браузер. =====
+  var CNT_URL = "https://abacus.jasoncameron.dev";
+  var CNT_NS = "eclipseav-dl-a4f9c2";
+  function cntFmt(n){ try { return Number(n).toLocaleString('ru-RU'); } catch(e){ return ''+n; } }
+  function cntSet(id, n){
+    if(typeof n !== 'number') return;
+    var el = document.getElementById(id); if(el){ el.textContent = cntFmt(n); }
+    var line = document.getElementById('dlCountLine'); if(line){ line.hidden = false; }
+  }
+  function cntGet(key, id){                              // показать текущее число (без накрутки)
+    fetch(CNT_URL + "/get/" + CNT_NS + "/" + key).then(function(r){ return r.json(); })
+      .then(function(d){ if(d) cntSet(id, d.value); }).catch(function(){});
+  }
+  function cntHitOnce(key, id, flag){                    // засчитать один раз на браузер, иначе просто показать
+    var seen = false; try { seen = !!localStorage.getItem(flag); } catch(e){}
+    if(seen){ cntGet(key, id); return; }
+    fetch(CNT_URL + "/hit/" + CNT_NS + "/" + key).then(function(r){ return r.json(); })
+      .then(function(d){ try { localStorage.setItem(flag,'1'); } catch(e){} if(d) cntSet(id, d.value); })
+      .catch(function(){ cntGet(key, id); });
+  }
+  function countDownload(){ cntHitOnce("count", "dlCount", "eclipseav_dl_v1"); }
+  cntHitOnce("views", "viewCount", "eclipseav_visit_v1");   // посещение — при загрузке страницы
+  cntGet("count", "dlCount");                                // скачивания — просто показать текущее
 </script>
