@@ -236,6 +236,7 @@
     <h4 data-i18n="legal_h">Пользовательское соглашение</h4>
     <p data-i18n="legal_intro">Скачивая и используя EclipseAV, вы принимаете условия ниже.</p>
     <ul data-i18n="legal_list"><li>EclipseAV — бесплатная бета-версия. Программа предоставляется «как есть», без каких-либо гарантий; в бете возможны ошибки и сбои.</li><li>Это бета-версия, а не замена профессиональному антивирусу — не полагайтесь на неё как на единственную защиту компьютера.</li><li>Мы не гарантируем обнаружение всех угроз и не гарантируем полную конфиденциальность ваших данных.</li><li>Разработчик не несёт ответственности за возможную потерю данных, ущерб или иные последствия использования программы. Вы используете её на свой страх и риск.</li><li>Бета-версия распространяется бесплатно, исходный код открыт.</li></ul>
+    <p class="copy"><a href="#" id="privLink2" data-i18n="priv_link">Политика конфиденциальности</a></p>
     <p class="copy" data-i18n="legal_copy">© 2026 EclipseAV · бета-версия · бесплатно</p>
   </div>
 </footer>
@@ -266,6 +267,101 @@
     <ol class="inssteps" data-i18n="ins_steps"><li><b>Скачайте</b> Eclipse.zip — нажмите «Скачать», поставьте галочку согласия, и кнопка станет активной.</li><li><b>Распакуйте</b> архив — правой кнопкой по Eclipse.zip → «Извлечь всё…» → «Извлечь». Не запускайте прямо из архива.</li><li><b>Запустите</b> — откройте папку Eclipse и дважды кликните по Eclipse.exe.</li><li><b>Если Windows предупредит</b> — нажмите «Подробнее» → «Выполнить в любом случае» (это нормально для беты без подписи).</li><li>(по желанию) Ярлык на рабочий стол: правой кнопкой по Eclipse.exe → «Отправить» → «Рабочий стол (создать ярлык)».</li><li>(по желанию) ИИ-помощник: установите Ollama — при первом открытии чата Eclipse сам скачает модель.</li></ol>
     <div class="insvideo-wrap" id="insVideo">
       <iframe src="https://www.youtube.com/embed/hlN3_PSf9Gg" title="EclipseAV — видеоинструкция" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ===== МОДАЛКА ПОЛИТИКИ КОНФИДЕНЦИАЛЬНОСТИ ===== -->
+<div id="privModal" class="overlay" hidden>
+  <div class="modal insmodal">
+    <button id="privClose" class="mclose" type="button" aria-label="Закрыть">&times;</button>
+    <div style="max-height:70vh;overflow:auto;text-align:left;padding-right:6px">
+      <!-- RU -->
+      <div id="polRu">
+        <h3>Политика конфиденциальности EclipseAV</h3>
+        <p style="color:#888;margin-top:-6px"><b>Дата обновления:</b> 19 июля 2026 · <b>Версия:</b> 1.0</p>
+        <h4>1. Кратко</h4>
+        <p>EclipseAV спроектирован по принципу «приватность по умолчанию». Программа работает локально на вашем компьютере. Мы не собираем, не передаём и не храним ваши личные файлы, пароли и историю сканирований на наших серверах — всё остаётся на вашем устройстве.</p>
+        <h4>2. Кто мы</h4>
+        <p>EclipseAV — бесплатный антивирус, который разрабатывает независимый проект EclipseAV. Вопросы о конфиденциальности: <b>eclipseav.store@gmail.com</b>.</p>
+        <h4>3. Какие данные обрабатывает программа</h4>
+        <p>Вся обработка происходит локально на вашем компьютере:</p>
+        <ul>
+          <li><b>Файлы и программы.</b> Для сканирования и работы нейросетевого детектора EclipseAV анализирует файлы и структуру программ. Анализ выполняется локально; содержимое файлов не покидает компьютер.</li>
+          <li><b>Пароли (менеджер паролей).</b> Хранятся локально в зашифрованном виде (AES-256-GCM) под мастер-паролем, который знаете только вы. Мастер-пароль нигде не сохраняется и не передаётся; если вы его забудете — восстановить пароли нельзя, только полный сброс. Разработчик не имеет доступа к вашим паролям.</li>
+          <li><b>Камера и микрофон.</b> EclipseAV контролирует, какие программы к ним обращаются. Сам он не записывает и не передаёт изображение или звук.</li>
+          <li><b>Защищённый DNS.</b> Шифрует DNS-запросы по протоколу DoH через Cloudflare (1.1.1.1), скрывая адреса сайтов от вашего интернет-провайдера. Запросы обрабатывает Cloudflare (своя политика — cloudflare.com). Выключено по умолчанию, включается вручную.</li>
+          <li><b>Расширение для браузера.</b> Общается с программой через локальный сервер на вашем компьютере (localhost) с одноразовым токеном. Передаются только логины для автозаполнения и запросы доступа к камере/микрофону — всё остаётся на устройстве.</li>
+          <li><b>Обращения в поддержку.</b> Если вы сами напишете нам через встроенный чат, отправляется только ваш текст и анонимный идентификатор для ответа (см. п. 7).</li>
+        </ul>
+        <h4>4. Данные, которые мы НЕ собираем</h4>
+        <p>Мы не собираем ваши личные файлы, содержимое паролей, историю посещённых сайтов, данные с камеры и микрофона. Мы не строим о вас рекламный или поведенческий профиль и не продаём ваши данные.</p>
+        <h4>5. Телеметрия и аналитика</h4>
+        <p>EclipseAV не отправляет телеметрию, статистику использования или аналитику. Программа не отслеживает ваши действия и не строит на их основе рекламный профиль.</p>
+        <h4>6. Отправка подозрительных файлов</h4>
+        <p>По умолчанию EclipseAV не отправляет ваши файлы никуда — вердикт выносит локальная модель. Дополнительно вы можете подключить облачную проверку VirusTotal своим личным API-ключом. Тогда в облако отправляется только SHA-256-хеш файла (его цифровой «отпечаток»), но никогда сам файл или его содержимое. Функция выключена, пока вы не добавите ключ.</p>
+        <h4>7. Сторонние компоненты и сервисы</h4>
+        <ul>
+          <li><b>Ollama (ИИ-помощник)</b> — отдельная программа и локально загружаемая модель; после загрузки работает офлайн, ваши разговоры не покидают устройство (ollama.com).</li>
+          <li><b>Cloudflare</b> — только если включён «Защищённый DNS» (п. 3).</li>
+          <li><b>VirusTotal</b> — только если вы включили облачную проверку своим ключом (п. 6).</li>
+          <li><b>abuse.ch</b> — источник обновлений вирусных баз; передаётся только запрос на загрузку, ваши данные не отправляются.</li>
+          <li><b>Telegram</b> — транспорт для встроенного чата поддержки: ваше сообщение доставляется разработчику (при необходимости — через промежуточный ретранслятор).</li>
+        </ul>
+        <h4>8. Файлы cookie и сайт</h4>
+        <p>Сайт eclipseav.store размещён на GitHub Pages. Как любой хостинг, GitHub может фиксировать обезличенные технические данные посещений (например, IP-адрес) в серверных логах — это регулируется политикой GitHub. Сам сайт не использует рекламные трекеры и cookie. Счётчик посещений и скачиваний работает через сторонний бесплатный сервис Abacus (abacus.jasoncameron.dev): он хранит только общие числа, а «один раз на браузер» обеспечивается флагом в памяти вашего браузера (localStorage). Личные данные счётчик не собирает.</p>
+        <h4>9. Данные детей</h4>
+        <p>EclipseAV не предназначен для лиц младше 16 лет, и мы сознательно не собираем данные детей.</p>
+        <h4>10. Ваши права</h4>
+        <p>Поскольку данные хранятся локально, вы полностью их контролируете: можете в любой момент удалить сохранённые пароли, очистить историю сканирований или удалить программу вместе со всеми её данными.</p>
+        <h4>11. Изменения политики</h4>
+        <p>Мы можем обновлять эту политику. Актуальная версия всегда публикуется на этой странице с датой обновления. О существенных изменениях сообщим в примечаниях к версии или в программе.</p>
+        <h4>12. Контакты</h4>
+        <p>Вопросы о конфиденциальности: <b>eclipseav.store@gmail.com</b>.</p>
+      </div>
+      <!-- EN -->
+      <div id="polEn" hidden>
+        <h3>EclipseAV Privacy Policy</h3>
+        <p style="color:#888;margin-top:-6px"><b>Last updated:</b> July 19, 2026 · <b>Version:</b> 1.0</p>
+        <h4>1. In brief</h4>
+        <p>EclipseAV is built on a “privacy by default” principle. The program runs locally on your computer. We do not collect, transmit, or store your personal files, passwords, or scan history on our servers — everything stays on your device.</p>
+        <h4>2. Who we are</h4>
+        <p>EclipseAV is a free antivirus developed by the independent EclipseAV project. Privacy questions: <b>eclipseav.store@gmail.com</b>.</p>
+        <h4>3. What data the program processes</h4>
+        <p>All processing happens locally on your computer:</p>
+        <ul>
+          <li><b>Files and programs.</b> To scan and run the neural-network detector, EclipseAV analyzes files and program structure. The analysis is performed locally; file contents never leave your computer.</li>
+          <li><b>Passwords (password manager).</b> Stored locally, encrypted (AES-256-GCM), protected by a master password known only to you. The master password is never saved or transmitted; if you forget it, passwords cannot be recovered — only a full reset. The developer has no access to your passwords.</li>
+          <li><b>Camera and microphone.</b> EclipseAV controls which programs access them. It does not record or transmit video or audio itself.</li>
+          <li><b>Secure DNS.</b> Encrypts your DNS queries via DoH through Cloudflare (1.1.1.1), hiding the sites you visit from your internet provider. Queries are handled by Cloudflare (its own policy — cloudflare.com). Off by default; you turn it on manually.</li>
+          <li><b>Browser extension.</b> It talks to the program through a local server on your computer (localhost) with a one-time token. Only autofill logins and camera/microphone access requests pass through it — all of it stays on your device.</li>
+          <li><b>Support requests.</b> If you write to us through the built-in chat, only your text and an anonymous identifier (for replying) are sent (see section 7).</li>
+        </ul>
+        <h4>4. Data we do NOT collect</h4>
+        <p>We do not collect your personal files, password contents, browsing history, or camera/microphone data. We do not build an advertising or behavioral profile of you, and we do not sell your data.</p>
+        <h4>5. Telemetry and analytics</h4>
+        <p>EclipseAV does not send telemetry, usage statistics, or analytics. The program does not track your actions or build an advertising profile from them.</p>
+        <h4>6. Sending suspicious files</h4>
+        <p>By default EclipseAV does not send your files anywhere — the verdict is made by the local model. Optionally you can enable VirusTotal cloud checking with your own API key. In that case only the file’s SHA-256 hash (its digital “fingerprint”) is sent — never the file itself or its contents. The feature is off until you add a key.</p>
+        <h4>7. Third-party components and services</h4>
+        <ul>
+          <li><b>Ollama (AI assistant)</b> — a separate program and a locally downloaded model; after download it works offline, and your conversations do not leave your device (ollama.com).</li>
+          <li><b>Cloudflare</b> — only if you enable Secure DNS (section 3).</li>
+          <li><b>VirusTotal</b> — only if you enable cloud checking with your key (section 6).</li>
+          <li><b>abuse.ch</b> — a source of virus-database updates; only a download request is sent, none of your data.</li>
+          <li><b>Telegram</b> — the transport for the built-in support chat: your message is delivered to the developer (through a relay if needed).</li>
+        </ul>
+        <h4>8. Cookies and the website</h4>
+        <p>The eclipseav.store site is hosted on GitHub Pages. Like any host, GitHub may record anonymous technical visit data (such as an IP address) in server logs — governed by GitHub’s policy. The site itself does not use advertising trackers or cookies. The visit/download counter runs through a free third-party service, Abacus (abacus.jasoncameron.dev): it stores only total numbers, and “once per browser” is handled by a flag in your browser’s localStorage. The counter collects no personal data.</p>
+        <h4>9. Children’s data</h4>
+        <p>EclipseAV is not intended for persons under 16, and we do not knowingly collect children’s data.</p>
+        <h4>10. Your rights</h4>
+        <p>Because data is stored locally, you fully control it: at any time you can delete saved passwords, clear scan history, or remove the program together with all its data.</p>
+        <h4>11. Changes to this policy</h4>
+        <p>We may update this policy. The current version is always published on this page with the update date. We will note significant changes in the version notes or in the program.</p>
+        <h4>12. Contact</h4>
+        <p>Privacy questions: <b>eclipseav.store@gmail.com</b>.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -307,6 +403,7 @@
       md_sub: "Eclipse.zip · ~22 МБ · бесплатно",
       md_check: "Я ознакомился и принимаю",
       md_link: "политику конфиденциальности",
+      priv_link: "Политика конфиденциальности",
       md_policy: "EclipseAV работает на вашем компьютере. Для обновления баз и отправки сообщений в поддержку используется интернет; ИИ-помощник работает офлайн. Как бета-версия, мы не гарантируем полную конфиденциальность и не отвечаем за ваши данные. Полные условия — в пользовательском соглашении внизу страницы.",
       md_dl: "Скачать Eclipse.zip"
     },
@@ -344,6 +441,7 @@
       md_sub: "Eclipse.zip · ~22 MB · free",
       md_check: "I have read and accept the",
       md_link: "privacy policy",
+      priv_link: "Privacy Policy",
       md_policy: "EclipseAV runs on your computer. Updating the databases and sending support messages use the internet; the AI assistant works offline. As a beta, we do not guarantee full confidentiality and are not responsible for your data. Full terms are in the Terms of Use at the bottom of the page.",
       md_dl: "Download Eclipse.zip"
     }
@@ -362,6 +460,8 @@
     document.documentElement.lang = lang;
     var sh = document.getElementById('shot');
     if(sh){ sh.src = SHOTS[lang] || SHOTS.ru; }
+    var pr = document.getElementById('polRu'); if(pr) pr.hidden = (lang !== 'ru');
+    var pe = document.getElementById('polEn'); if(pe) pe.hidden = (lang !== 'en');
     var btns = document.querySelectorAll('.langbtn');
     for(var j=0;j<btns.length;j++){
       btns[j].classList.toggle('active', btns[j].getAttribute('data-lang') === lang);
@@ -402,11 +502,12 @@
     document.body.appendChild(a); a.click(); a.remove();
     dlModal.hidden = true;
   });
-  document.getElementById('policyLink').addEventListener('click', function(e){
-    e.preventDefault();
-    var p = document.getElementById('policyText');
-    p.hidden = !p.hidden;
-  });
+  var privModal = document.getElementById('privModal');
+  document.getElementById('policyLink').addEventListener('click', function(e){ e.preventDefault(); privModal.hidden = false; });
+  var privLink2 = document.getElementById('privLink2');
+  if(privLink2) privLink2.addEventListener('click', function(e){ e.preventDefault(); privModal.hidden = false; });
+  document.getElementById('privClose').addEventListener('click', function(){ privModal.hidden = true; });
+  privModal.addEventListener('click', function(e){ if(e.target === privModal){ privModal.hidden = true; } });
 
   // ===== Выбор версии (Альфа по умолчанию / Бета) =====
   var VERS = {
