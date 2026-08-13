@@ -1,0 +1,708 @@
+<title>EclipseAV — высококлассные проекты в разработке</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Высококлассные проекты в разработке. EclipseAV — антивирус с собственной нейросетью, обучённой на 70 000 файлов.">
+<meta name="theme-color" content="#060a15">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  :root{
+    --bg:#060a15; --bg2:#0a1020; --card:#0d1425; --card2:#111a2e;
+    --line:#1b2740; --line2:#243252;
+    --text:#eaeefb; --muted:#9aa5c4; --dim:#6f7b9c;
+    --accent:#5b6cff;            /* синий — основной */
+    --acc2:#8f7cff;              /* фиолетовый — совсем чуть-чуть, только в свечении */
+    --ok:#3ddc97; --warn:#ffb84d;
+    --sans:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.65;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden}
+  a{color:inherit; text-decoration:none}
+  h1,h2,h3{letter-spacing:-.025em; line-height:1.15; text-wrap:balance}
+  .wrap{width:min(1060px,90vw); margin:0 auto}
+  .center{text-align:center}
+
+  /* ---------- шапка ---------- */
+  header{position:sticky; top:0; z-index:40; background:rgba(6,10,21,.82);
+    backdrop-filter:blur(14px); border-bottom:1px solid var(--line)}
+  header .wrap{display:flex; align-items:center; gap:20px; min-height:62px; flex-wrap:wrap;
+    width:100%; max-width:none; margin:0; padding:0 clamp(14px,1.6vw,26px)}
+  .logo{display:flex; align-items:center; gap:11px; font-size:17px; font-weight:800;
+    letter-spacing:-.02em; margin-right:auto}
+  .logo .m{width:26px; height:26px; border-radius:50%; flex:none;
+    background:radial-gradient(circle at 42% 34%,#a99cff,var(--accent) 62%,#2b3ad6);
+    box-shadow:0 0 0 4px rgba(91,108,255,.13), 0 0 18px rgba(143,124,255,.35)}
+  .langopts{display:inline-flex; border:1px solid var(--line2); border-radius:9px; overflow:hidden}
+  .langbtn{padding:5px 12px; font-size:13px; font-weight:600; background:transparent; border:none;
+    cursor:pointer; color:var(--muted); font-family:inherit; transition:.14s}
+  .langbtn+.langbtn{border-left:1px solid var(--line2)}
+  .langbtn:hover{background:rgba(91,108,255,.12); color:var(--text)}
+  .langbtn.active{background:var(--accent); color:#fff}
+  .navdl{padding:9px 18px; font-size:13.5px; font-weight:700; border-radius:9px;
+    background:var(--accent); color:#fff; border:none; cursor:pointer; font-family:inherit;
+    transition:.15s}
+  .navdl:hover{background:#4b5bf0; box-shadow:0 6px 22px rgba(91,108,255,.4)}
+  .ghbtn{position:relative; display:inline-flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border-radius:9px; flex:none; color:var(--muted);
+    border:1px solid var(--line2); background:rgba(13,20,37,.6); transition:.15s}
+  .ghbtn:hover{color:var(--text); border-color:var(--accent); background:rgba(91,108,255,.14)}
+  .ghbtn svg{width:19px; height:19px}
+  .ghtip{position:absolute; top:calc(100% + 8px); right:0; white-space:nowrap;
+    background:var(--card2); border:1px solid var(--line2); color:var(--text);
+    font-size:12.5px; font-weight:600; padding:6px 10px; border-radius:8px;
+    box-shadow:0 10px 26px rgba(0,0,0,.55); pointer-events:none; z-index:50;
+    opacity:0; visibility:hidden; transform:translateY(-4px); transition:.15s}
+  .ghbtn:hover .ghtip, .ghbtn:focus-visible .ghtip{opacity:1; visibility:visible; transform:translateY(0)}
+  @media(prefers-reduced-motion:reduce){ .ghtip{transition:none} }
+
+  /* ---------- герой ---------- */
+  .hero{position:relative; padding:clamp(26px,4vw,48px) 0 clamp(40px,6vw,64px); overflow:hidden}
+  .hero::before{content:""; position:absolute; inset:-40% -20% auto -20%; height:120%;
+    background:
+      radial-gradient(50% 55% at 50% 0%, rgba(91,108,255,.20), transparent 70%),
+      radial-gradient(38% 45% at 76% 12%, rgba(143,124,255,.13), transparent 72%);
+    pointer-events:none}
+  .hero .wrap{position:relative}
+  .hero h1{margin-top:0; font-size:clamp(34px,6.6vw,72px); font-weight:800}
+  .hero h1 .g{background:linear-gradient(96deg,#fff 8%,#bcc6ff 46%,var(--acc2) 92%);
+    -webkit-background-clip:text; background-clip:text; color:transparent}
+  .hero p.lead{margin-top:18px; font-size:clamp(15.5px,1.9vw,19px); color:var(--muted);
+    max-width:60ch}
+  .cta{margin-top:34px; display:flex; gap:14px; flex-wrap:wrap; align-items:center}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:14px 26px; border-radius:11px; font-size:15px; font-weight:700; cursor:pointer;
+    border:1px solid transparent; font-family:inherit; transition:.16s; white-space:nowrap}
+  .btn svg{width:17px; height:17px; flex:none}
+  .btn.pri{background:var(--accent); color:#fff; box-shadow:0 8px 26px rgba(91,108,255,.32)}
+  .btn.pri:hover{background:#4b5bf0; transform:translateY(-1px);
+    box-shadow:0 12px 34px rgba(91,108,255,.45)}
+  .btn.ghost{background:rgba(17,26,46,.8); border-color:var(--line2); color:var(--text)}
+  .btn.ghost:hover{border-color:var(--accent); background:rgba(91,108,255,.13)}
+  .btn:focus-visible{outline:2px solid var(--acc2); outline-offset:3px}
+  .btn:disabled{opacity:.45; cursor:not-allowed; transform:none; box-shadow:none}
+
+  /* ---------- секции ---------- */
+  section.blk{padding:clamp(50px,8vw,90px) 0; border-top:1px solid var(--line)}
+  .kicker{font-size:12.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--accent)}
+  .blk h2{margin-top:12px; font-size:clamp(25px,3.7vw,40px); font-weight:800}
+  .blk .sub{margin-top:14px; color:var(--muted); max-width:62ch; font-size:clamp(15px,1.7vw,17px)}
+
+  /* витрина проекта */
+  .shotwrap{margin-top:36px; border:1px solid var(--line2); border-radius:16px; overflow:hidden;
+    background:var(--bg2); box-shadow:0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(143,124,255,.07)}
+  .shotwrap img{display:block; width:100%; height:auto}
+  .shotcap{margin-top:14px; font-size:13.5px; color:var(--dim); text-align:center}
+  .shotlbl{margin-top:34px; margin-bottom:12px; font-size:14px; font-weight:600;
+    color:var(--muted); letter-spacing:.01em}
+
+  /* цифры */
+  .stats{margin-top:38px; display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+  @media(max-width:700px){ .stats{grid-template-columns:1fr} }
+  .stat{background:linear-gradient(180deg,var(--card2),var(--card)); border:1px solid var(--line2);
+    border-radius:15px; padding:26px 24px}
+  .stat .n{font-size:clamp(28px,4vw,40px); font-weight:800; letter-spacing:-.03em;
+    background:linear-gradient(94deg,#fff,#b9c2ff 62%,var(--acc2));
+    -webkit-background-clip:text; background-clip:text; color:transparent}
+  .stat .t{margin-top:8px; font-weight:700; font-size:15px}
+  .stat .d{margin-top:5px; color:var(--dim); font-size:13.5px; line-height:1.55}
+
+  /* возможности */
+  .feats{margin-top:38px; display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+  @media(max-width:900px){ .feats{grid-template-columns:1fr 1fr} }
+  @media(max-width:620px){ .feats{grid-template-columns:1fr} }
+  .feat{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 22px;
+    transition:.18s}
+  .feat:hover{border-color:var(--line2); background:var(--card2); transform:translateY(-2px)}
+  .feat .ic{width:40px; height:40px; border-radius:11px; display:flex; align-items:center;
+    justify-content:center; background:rgba(91,108,255,.14); border:1px solid rgba(143,124,255,.22)}
+  .feat .ic svg{width:20px; height:20px; color:#aab4ff}
+  .feat h3{margin-top:15px; font-size:16.5px; font-weight:700}
+  .feat p{margin-top:7px; color:var(--muted); font-size:14px; line-height:1.6}
+
+  /* скачивание */
+  .dlbox{position:relative; margin-top:34px; border:1px solid var(--line2); border-radius:18px;
+    padding:clamp(26px,5vw,44px); text-align:center; overflow:hidden;
+    background:radial-gradient(120% 130% at 50% 0%, rgba(91,108,255,.16), var(--card) 62%)}
+  .verpick{position:absolute; top:16px; right:18px}
+  .verbtn{display:inline-flex; align-items:center; gap:7px; padding:7px 13px; font-size:13px;
+    font-weight:700; border-radius:9px; background:rgba(10,16,32,.85); color:var(--text);
+    border:1px solid var(--line2); cursor:pointer; font-family:inherit}
+  .verbtn:hover{border-color:var(--accent)}
+  .vermenu{position:absolute; right:0; top:calc(100% + 6px); background:var(--card2);
+    border:1px solid var(--line2); border-radius:11px; overflow:hidden; min-width:150px;
+    box-shadow:0 18px 44px rgba(0,0,0,.6); z-index:5}
+  .vermenu[hidden]{display:none}
+  .vermenu button{display:block; width:100%; text-align:left; padding:11px 15px; font-size:13.5px;
+    background:none; border:none; color:var(--text); cursor:pointer; font-family:inherit}
+  .vermenu button:hover{background:rgba(91,108,255,.18)}
+  .vermenu button.on{color:#fff; background:rgba(91,108,255,.28); font-weight:700}
+  .dlbox h2{font-size:clamp(23px,3.4vw,33px); font-weight:800}
+  .dlbox .sub{margin:10px auto 0; color:var(--muted); max-width:52ch}
+  .meta{display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin:22px 0 6px;
+    font-size:14px; color:var(--dim)}
+  .meta b{color:var(--text)}
+  .counters{margin-top:16px; font-size:13.5px; color:var(--dim)}
+  .counters b{color:var(--muted)}
+  .alphadiff{margin:18px auto 0; max-width:56ch; font-size:13.5px; color:var(--muted);
+    background:rgba(143,124,255,.08); border:1px solid rgba(143,124,255,.2);
+    border-radius:11px; padding:13px 16px}
+  .warn{margin:16px auto 0; max-width:54ch; font-size:13px; color:var(--dim)}
+  .warn b{color:var(--warn)}
+
+  /* ИИ-помощник */
+  .aibox{margin-top:22px; background:var(--card); border:1px solid var(--line); border-radius:15px;
+    padding:24px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; text-align:left}
+  .aibox .info{flex:1 1 280px; min-width:0}
+  .aibox h3{font-size:16.5px; font-weight:700}
+  .aibox p{margin-top:5px; color:var(--muted); font-size:14px}
+
+  /* подвал */
+  footer{border-top:1px solid var(--line); background:var(--bg2);
+    padding:clamp(30px,5vw,44px) 0 46px}
+  footer .wrap{max-width:820px}
+  footer h4{font-size:12.5px; font-weight:700; color:var(--muted); letter-spacing:.03em;
+    margin-bottom:9px}
+  footer p, footer ul{font-size:12px; line-height:1.75; color:var(--dim)}
+  footer ul{list-style:none; margin-top:8px; display:grid; gap:6px}
+  footer li{padding-left:15px; position:relative}
+  footer li::before{content:"·"; position:absolute; left:5px; color:var(--muted)}
+  footer .links{margin-top:18px; display:flex; gap:18px; flex-wrap:wrap; font-size:12.5px}
+  footer .links a{color:var(--muted); text-decoration:underline; cursor:pointer}
+  footer .links a:hover{color:var(--accent)}
+  footer .copy{margin-top:16px}
+
+  /* модалки */
+  .overlay{position:fixed; inset:0; background:rgba(3,6,14,.78); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; padding:20px; z-index:60}
+  .overlay[hidden]{display:none}
+  .modal{background:var(--card2); border:1px solid var(--line2); border-radius:17px;
+    padding:clamp(24px,5vw,34px); width:min(460px,100%); position:relative;
+    box-shadow:0 40px 90px rgba(0,0,0,.7); text-align:left}
+  .modal.wide{width:min(760px,100%)}
+  .modal h3{font-size:20px; font-weight:800}
+  .modal .msub{margin-top:7px; color:var(--muted); font-size:14px}
+  .mclose{position:absolute; top:10px; right:14px; background:none; border:none; font-size:26px;
+    line-height:1; color:var(--dim); cursor:pointer; padding:4px}
+  .mclose:hover{color:var(--text)}
+  .mcheck{display:flex; align-items:flex-start; gap:11px; margin-top:22px; font-size:13px;
+    color:var(--muted); line-height:1.55}
+  .mcheck input{margin-top:2px; width:17px; height:17px; accent-color:var(--accent); flex:none;
+    cursor:pointer}
+  .mcheck label{cursor:pointer}
+  .mcheck a{color:var(--muted); text-decoration:underline; cursor:pointer}
+  .mcheck a:hover{color:var(--accent)}
+  #dlConfirm{width:100%; margin-top:20px}
+  .scrollbox{max-height:70vh; overflow:auto; padding-right:8px; margin-top:6px}
+  .scrollbox h3{font-size:18px; margin-bottom:4px}
+  .scrollbox h4{font-size:14px; font-weight:700; margin-top:18px; color:var(--text)}
+  .scrollbox p{font-size:13.5px; color:var(--muted); line-height:1.7; margin-top:6px}
+  .scrollbox b{color:var(--text)}
+  .steps{margin-top:16px; display:grid; gap:12px; counter-reset:s}
+  .steps li{list-style:none; position:relative; padding-left:38px; font-size:14px;
+    color:var(--muted); line-height:1.6}
+  .steps li::before{counter-increment:s; content:counter(s); position:absolute; left:0; top:0;
+    width:26px; height:26px; border-radius:8px; background:rgba(91,108,255,.18);
+    border:1px solid rgba(143,124,255,.25); color:#b9c2ff; font-size:13px; font-weight:700;
+    display:flex; align-items:center; justify-content:center}
+  .vid{margin-top:18px; position:relative; padding-top:56.25%; border-radius:12px;
+    overflow:hidden; border:1px solid var(--line2); background:#000}
+  .vid iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+</style>
+
+<header>
+  <div class="wrap">
+    <div class="logo"><span class="m"></span><span>EclipseAV</span></div>
+    <div class="langopts">
+      <button class="langbtn" id="lru" type="button" onclick="setLang('ru')">Русский</button>
+      <button class="langbtn" id="len" type="button" onclick="setLang('en')">English</button>
+    </div>
+    <a class="ghbtn" href="https://github.com/lev985/EclipseAV-Alpha-/tree/main/EclipseAV-GitHub" target="_blank" rel="noopener"
+       aria-label="GitHub">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg>
+      <span class="ghtip" data-i18n="gh_tip">Посмотреть исходный код</span>
+    </a>
+    <button class="navdl" type="button" onclick="openDl()" data-i18n="nav_dl">Скачать</button>
+  </div>
+</header>
+
+<!-- ================= ГЕРОЙ ================= -->
+<section class="hero">
+  <div class="wrap">
+    <h1><span class="g" data-i18n="hero_h1">Высококлассные проекты в разработке</span></h1>
+    <p class="lead" data-i18n="hero_p">Программы для Windows, написанные с нуля — без готовых движков и чужих ядер. Первый проект уже можно скачать и попробовать.</p>
+  </div>
+</section>
+
+<!-- ================= ПРОЕКТ ================= -->
+<section class="blk" id="project">
+  <div class="wrap">
+    <div class="kicker" data-i18n="pr_kick">Проект · Антивирус</div>
+    <h2 data-i18n="pr_h">EclipseAV</h2>
+    <p class="shotcap shotlbl" data-i18n="pr_cap">Экран EclipseAV Alpha</p>
+    <div class="shotwrap" style="margin-top:0"><img id="shotMain" src="data:image/webp;base64,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" alt="EclipseAV Alpha — главный экран"></div>
+  </div>
+</section>
+
+<!-- ================= ЦИФРЫ ================= -->
+<section class="blk">
+  <div class="wrap">
+    <div class="kicker" data-i18n="st_kick">Нейросеть</div>
+    <h2 data-i18n="st_h">Обучена на настоящих вирусах</h2>
+    <p class="sub" data-i18n="st_p">Модель переобучена на публичном наборе данных EMBER2024 — это реальные образцы вредоносных программ 2024 года, а не выдуманные примеры.</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="n">70 000+</div>
+        <div class="t" data-i18n="st1_t">файлов в обучении</div>
+        <div class="d" data-i18n="st1_d">37 661 вредоносный и 32 801 безопасный файл — 32-битные, 64-битные и специально «маскирующиеся» вирусы.</div>
+      </div>
+      <div class="stat">
+        <div class="n">92%</div>
+        <div class="t" data-i18n="st2_t">вирусов распознаёт</div>
+        <div class="d" data-i18n="st2_d">На проверочном наборе, который модель никогда не видела при обучении. Маскирующиеся вирусы — 74%.</div>
+      </div>
+      <div class="stat">
+        <div class="n">0</div>
+        <div class="t" data-i18n="st3_t">ложных срабатываний</div>
+        <div class="d" data-i18n="st3_d">Ни одна из 200 проверенных обычных программ не была помечена вирусом.</div>
+      </div>
+    </div>
+    <p class="warn" style="max-width:60ch" data-i18n="st_note"><b>Честно:</b> это результаты моих собственных проверок, а не независимой лаборатории. EclipseAV пока в разработке и не заменяет профессиональный антивирус.</p>
+  </div>
+</section>
+
+<!-- ================= ВОЗМОЖНОСТИ ================= -->
+<section class="blk">
+  <div class="wrap">
+    <div class="kicker" data-i18n="f_kick">Возможности</div>
+    <h2 data-i18n="f_h">Что уже работает</h2>
+    <div class="feats">
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8.9 8 10 4.6-1.1 8-5 8-10V6z"/></svg></div>
+        <h3 data-i18n="f1_t">Защита в реальном времени</h3>
+        <p data-i18n="f1_d">Следит за файлами и программами, пока вы работаете, и останавливает подозрительное сразу.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg></div>
+        <h3 data-i18n="f2_t">Проверка нейросетью</h3>
+        <p data-i18n="f2_d">Любая проверка дополнительно проходит через нейросеть — она узнаёт вирусы, которых нет в базах.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h3 data-i18n="f3_t">Менеджер паролей</h3>
+        <p data-i18n="f3_d">Хранилище с шифрованием AES-256 и одним мастер-паролем. Всё остаётся на вашем компьютере.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m23 7-7 5 7 5z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+        <h3 data-i18n="f4_t">Камера и микрофон</h3>
+        <p data-i18n="f4_d">Показывает, какая программа включила камеру или микрофон, и даёт закрыть ей доступ.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></svg></div>
+        <h3 data-i18n="f5_t">Защищённый DNS</h3>
+        <p data-i18n="f5_d">Шифрует запросы к сайтам через Cloudflare, чтобы провайдер не видел, куда вы заходите.</p>
+      </div>
+      <div class="feat">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></div>
+        <h3 data-i18n="f6_t">Блокировка рекламы и уборка</h3>
+        <p data-i18n="f6_d">Убирает рекламные баннеры на сайтах и чистит мусорные файлы с подробным отчётом.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= СКАЧАТЬ ================= -->
+<section class="blk" id="download">
+  <div class="wrap">
+    <div class="dlbox">
+      <div class="verpick">
+        <button class="verbtn" id="verBtn" type="button" onclick="toggleVer()">
+          <span id="verLabel">Альфа</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="vermenu" id="verMenu" hidden>
+          <button type="button" onclick="pickVer('alpha')" id="vopt_alpha">Альфа</button>
+          <button type="button" onclick="pickVer('beta')" id="vopt_beta">Бета</button>
+        </div>
+      </div>
+      <h2 data-i18n="dl_h">Скачать EclipseAV</h2>
+      <p class="sub" id="dlSub" data-i18n="dl_sub">Бесплатно, для Windows 10 и 11.</p>
+      <div class="meta">
+        <span><span data-i18n="dl_m1">Версия</span>: <b id="mVer">альфа</b></span>
+        <span><span data-i18n="dl_m2">Размер</span>: <b id="mSize">~81 МБ</b></span>
+        <span><b>Windows 10 / 11</b></span>
+        <span><b data-i18n="dl_m3">Бесплатно</b></span>
+      </div>
+      <button class="btn pri" style="margin-top:18px" type="button" onclick="openDl()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>
+        <span id="dlBtnText">Скачать EclipseAV Alpha.zip</span>
+      </button>
+      <div class="counters">👀 <b id="viewCount">—</b> <span data-i18n="c_v">посетили</span> · 🔥 <b id="dlCount">—</b> <span data-i18n="c_d">скачали</span></div>
+      <div class="alphadiff" id="alphaDiff" data-i18n="alpha_diff">Альфа — свежая версия с полной нейросетью (весит больше). Бета — лёгкая и стабильная, но распознаёт хуже.</div>
+      <p class="warn" data-i18n="dl_warn">Windows может предупредить при запуске: программа пока без цифровой подписи. Нажмите <b>«Подробнее»</b> → <b>«Выполнить в любом случае»</b>.</p>
+      <div style="margin-top:22px">
+        <button class="btn ghost" type="button" onclick="openIns()" data-i18n="dl_help">Не понял? Показать инструкцию</button>
+      </div>
+    </div>
+
+    <div class="aibox">
+      <div class="info">
+        <h3 data-i18n="ai_t">ИИ-помощник — по желанию</h3>
+        <p data-i18n="ai_d">Чтобы в EclipseAV работал чат с ИИ, установите бесплатную программу Ollama. Она работает офлайн, прямо на вашем компьютере. Без неё антивирус работает полностью.</p>
+      </div>
+      <a class="btn ghost" href="https://ollama.com/download" target="_blank" rel="noopener" data-i18n="ai_b">Скачать Ollama</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ПОДВАЛ ================= -->
+<footer>
+  <div class="wrap">
+    <h4 data-i18n="lg_h">Пользовательское соглашение</h4>
+    <ul>
+      <li data-i18n="lg1">EclipseAV распространяется бесплатно и предоставляется «как есть», без гарантий.</li>
+      <li data-i18n="lg2">Программа находится в разработке и не заменяет профессиональный антивирус.</li>
+      <li data-i18n="lg3">Автор не несёт ответственности за возможную потерю данных — делайте резервные копии.</li>
+      <li data-i18n="lg4">Устанавливая программу, вы соглашаетесь с этими условиями.</li>
+    </ul>
+    <div class="links">
+      <a onclick="openPriv()" data-i18n="priv_link">Политика конфиденциальности</a>
+      <a href="mailto:eclipseav.store@gmail.com">eclipseav.store@gmail.com</a>
+    </div>
+    <p class="copy">© <span id="yr">2026</span> EclipseAV</p>
+  </div>
+</footer>
+
+<!-- ===== модалка скачивания ===== -->
+<div id="dlModal" class="overlay" hidden>
+  <div class="modal">
+    <button class="mclose" type="button" onclick="closeDl()" aria-label="Закрыть">&times;</button>
+    <h3 data-i18n="md_h">Перед скачиванием</h3>
+    <p class="msub" data-i18n="md_sub">Пара честных слов — и файл ваш.</p>
+    <div class="mcheck">
+      <input type="checkbox" id="agree">
+      <label for="agree"><span data-i18n="md_ag">Я понимаю, что программа в разработке, распространяется «как есть» и не заменяет профессиональный антивирус. Я прочитал</span> <a onclick="openPriv()" data-i18n="md_pol">политику конфиденциальности</a>.</label>
+    </div>
+    <button class="btn pri" id="dlConfirm" type="button" disabled onclick="doDownload()">
+      <span id="dlConfirmText">Скачать</span>
+    </button>
+  </div>
+</div>
+
+<!-- ===== модалка инструкции ===== -->
+<div id="insModal" class="overlay" hidden>
+  <div class="modal wide">
+    <button class="mclose" type="button" onclick="closeIns()" aria-label="Закрыть">&times;</button>
+    <div class="scrollbox">
+      <h3 data-i18n="in_h">Как установить EclipseAV</h3>
+      <ol class="steps">
+        <li data-i18n="in1">Нажмите «Скачать» и сохраните архив.</li>
+        <li data-i18n="in2">Откройте папку «Загрузки», нажмите на архив правой кнопкой → «Извлечь всё».</li>
+        <li data-i18n="in3">Зайдите в распакованную папку и запустите <b>Eclipse.exe</b>.</li>
+        <li data-i18n="in4">Если Windows покажет синее окно — нажмите «Подробнее» → «Выполнить в любом случае». Это потому, что у программы пока нет платной цифровой подписи.</li>
+        <li data-i18n="in5">Готово: EclipseAV откроется и начнёт защищать компьютер.</li>
+      </ol>
+      <div class="vid"><iframe src="https://www.youtube.com/embed/hlN3_PSf9Gg" title="EclipseAV" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== модалка политики ===== -->
+<div id="privModal" class="overlay" hidden>
+  <div class="modal wide">
+    <button class="mclose" type="button" onclick="closePriv()" aria-label="Закрыть">&times;</button>
+    <div class="scrollbox">
+      <div id="polRu">
+        <h3>Политика конфиденциальности EclipseAV</h3>
+        <p style="color:#888;margin-top:-6px"><b>Дата обновления:</b> 19 июля 2026 · <b>Версия:</b> 1.0</p>
+        <h4>1. Кратко</h4>
+        <p>EclipseAV спроектирован по принципу «приватность по умолчанию». Программа работает локально на вашем компьютере. Мы не собираем, не передаём и не храним ваши личные файлы, пароли и историю сканирований на наших серверах — всё остаётся на вашем устройстве.</p>
+        <h4>2. Кто мы</h4>
+        <p>EclipseAV — бесплатный антивирус, который разрабатывает независимый проект EclipseAV. Вопросы о конфиденциальности: <b>eclipseav.store@gmail.com</b>.</p>
+        <h4>3. Какие данные обрабатывает программа</h4>
+        <p>Вся обработка происходит локально на вашем компьютере:</p>
+        <ul>
+          <li><b>Файлы и программы.</b> Для сканирования и работы нейросетевого детектора EclipseAV анализирует файлы и структуру программ. Анализ выполняется локально; содержимое файлов не покидает компьютер.</li>
+          <li><b>Пароли (менеджер паролей).</b> Хранятся локально в зашифрованном виде (AES-256-GCM) под мастер-паролем, который знаете только вы. Мастер-пароль нигде не сохраняется и не передаётся; если вы его забудете — восстановить пароли нельзя, только полный сброс. Разработчик не имеет доступа к вашим паролям.</li>
+          <li><b>Камера и микрофон.</b> EclipseAV контролирует, какие программы к ним обращаются. Сам он не записывает и не передаёт изображение или звук.</li>
+          <li><b>Защищённый DNS.</b> Шифрует DNS-запросы по протоколу DoH через Cloudflare (1.1.1.1), скрывая адреса сайтов от вашего интернет-провайдера. Запросы обрабатывает Cloudflare (своя политика — cloudflare.com). Выключено по умолчанию, включается вручную.</li>
+          <li><b>Расширение для браузера.</b> Общается с программой через локальный сервер на вашем компьютере (localhost) с одноразовым токеном. Передаются только логины для автозаполнения и запросы доступа к камере/микрофону — всё остаётся на устройстве.</li>
+          <li><b>Обращения в поддержку.</b> Если вы сами напишете нам через встроенный чат, отправляется только ваш текст и анонимный идентификатор для ответа (см. п. 7).</li>
+        </ul>
+        <h4>4. Данные, которые мы НЕ собираем</h4>
+        <p>Мы не собираем ваши личные файлы, содержимое паролей, историю посещённых сайтов, данные с камеры и микрофона. Мы не строим о вас рекламный или поведенческий профиль и не продаём ваши данные.</p>
+        <h4>5. Телеметрия и аналитика</h4>
+        <p>EclipseAV не отправляет телеметрию, статистику использования или аналитику. Программа не отслеживает ваши действия и не строит на их основе рекламный профиль.</p>
+        <h4>6. Отправка подозрительных файлов</h4>
+        <p>По умолчанию EclipseAV не отправляет ваши файлы никуда — вердикт выносит локальная модель. Дополнительно вы можете подключить облачную проверку VirusTotal своим личным API-ключом. Тогда в облако отправляется только SHA-256-хеш файла (его цифровой «отпечаток»), но никогда сам файл или его содержимое. Функция выключена, пока вы не добавите ключ.</p>
+        <h4>7. Сторонние компоненты и сервисы</h4>
+        <ul>
+          <li><b>Ollama (ИИ-помощник)</b> — отдельная программа и локально загружаемая модель; после загрузки работает офлайн, ваши разговоры не покидают устройство (ollama.com).</li>
+          <li><b>Cloudflare</b> — только если включён «Защищённый DNS» (п. 3).</li>
+          <li><b>VirusTotal</b> — только если вы включили облачную проверку своим ключом (п. 6).</li>
+          <li><b>abuse.ch</b> — источник обновлений вирусных баз; передаётся только запрос на загрузку, ваши данные не отправляются.</li>
+          <li><b>Telegram</b> — транспорт для встроенного чата поддержки: ваше сообщение доставляется разработчику (при необходимости — через промежуточный ретранслятор).</li>
+        </ul>
+        <h4>8. Файлы cookie и сайт</h4>
+        <p>Сайт eclipseav.store размещён на GitHub Pages. Как любой хостинг, GitHub может фиксировать обезличенные технические данные посещений (например, IP-адрес) в серверных логах — это регулируется политикой GitHub. Сам сайт не использует рекламные трекеры и cookie. Счётчик посещений и скачиваний работает через сторонний бесплатный сервис Abacus (abacus.jasoncameron.dev): он хранит только общие числа, а «один раз на браузер» обеспечивается флагом в памяти вашего браузера (localStorage). Личные данные счётчик не собирает.</p>
+        <h4>9. Данные детей</h4>
+        <p>EclipseAV не предназначен для лиц младше 16 лет, и мы сознательно не собираем данные детей.</p>
+        <h4>10. Ваши права</h4>
+        <p>Поскольку данные хранятся локально, вы полностью их контролируете: можете в любой момент удалить сохранённые пароли, очистить историю сканирований или удалить программу вместе со всеми её данными.</p>
+        <h4>11. Изменения политики</h4>
+        <p>Мы можем обновлять эту политику. Актуальная версия всегда публикуется на этой странице с датой обновления. О существенных изменениях сообщим в примечаниях к версии или в программе.</p>
+        <h4>12. Контакты</h4>
+        <p>Вопросы о конфиденциальности: <b>eclipseav.store@gmail.com</b>.</p>
+      </div>
+      <!-- EN -->
+      <div id="polEn" hidden>
+        <h3>EclipseAV Privacy Policy</h3>
+        <p style="color:#888;margin-top:-6px"><b>Last updated:</b> July 19, 2026 · <b>Version:</b> 1.0</p>
+        <h4>1. In brief</h4>
+        <p>EclipseAV is built on a “privacy by default” principle. The program runs locally on your computer. We do not collect, transmit, or store your personal files, passwords, or scan history on our servers — everything stays on your device.</p>
+        <h4>2. Who we are</h4>
+        <p>EclipseAV is a free antivirus developed by the independent EclipseAV project. Privacy questions: <b>eclipseav.store@gmail.com</b>.</p>
+        <h4>3. What data the program processes</h4>
+        <p>All processing happens locally on your computer:</p>
+        <ul>
+          <li><b>Files and programs.</b> To scan and run the neural-network detector, EclipseAV analyzes files and program structure. The analysis is performed locally; file contents never leave your computer.</li>
+          <li><b>Passwords (password manager).</b> Stored locally, encrypted (AES-256-GCM), protected by a master password known only to you. The master password is never saved or transmitted; if you forget it, passwords cannot be recovered — only a full reset. The developer has no access to your passwords.</li>
+          <li><b>Camera and microphone.</b> EclipseAV controls which programs access them. It does not record or transmit video or audio itself.</li>
+          <li><b>Secure DNS.</b> Encrypts your DNS queries via DoH through Cloudflare (1.1.1.1), hiding the sites you visit from your internet provider. Queries are handled by Cloudflare (its own policy — cloudflare.com). Off by default; you turn it on manually.</li>
+          <li><b>Browser extension.</b> It talks to the program through a local server on your computer (localhost) with a one-time token. Only autofill logins and camera/microphone access requests pass through it — all of it stays on your device.</li>
+          <li><b>Support requests.</b> If you write to us through the built-in chat, only your text and an anonymous identifier (for replying) are sent (see section 7).</li>
+        </ul>
+        <h4>4. Data we do NOT collect</h4>
+        <p>We do not collect your personal files, password contents, browsing history, or camera/microphone data. We do not build an advertising or behavioral profile of you, and we do not sell your data.</p>
+        <h4>5. Telemetry and analytics</h4>
+        <p>EclipseAV does not send telemetry, usage statistics, or analytics. The program does not track your actions or build an advertising profile from them.</p>
+        <h4>6. Sending suspicious files</h4>
+        <p>By default EclipseAV does not send your files anywhere — the verdict is made by the local model. Optionally you can enable VirusTotal cloud checking with your own API key. In that case only the file’s SHA-256 hash (its digital “fingerprint”) is sent — never the file itself or its contents. The feature is off until you add a key.</p>
+        <h4>7. Third-party components and services</h4>
+        <ul>
+          <li><b>Ollama (AI assistant)</b> — a separate program and a locally downloaded model; after download it works offline, and your conversations do not leave your device (ollama.com).</li>
+          <li><b>Cloudflare</b> — only if you enable Secure DNS (section 3).</li>
+          <li><b>VirusTotal</b> — only if you enable cloud checking with your key (section 6).</li>
+          <li><b>abuse.ch</b> — a source of virus-database updates; only a download request is sent, none of your data.</li>
+          <li><b>Telegram</b> — the transport for the built-in support chat: your message is delivered to the developer (through a relay if needed).</li>
+        </ul>
+        <h4>8. Cookies and the website</h4>
+        <p>The eclipseav.store site is hosted on GitHub Pages. Like any host, GitHub may record anonymous technical visit data (such as an IP address) in server logs — governed by GitHub’s policy. The site itself does not use advertising trackers or cookies. The visit/download counter runs through a free third-party service, Abacus (abacus.jasoncameron.dev): it stores only total numbers, and “once per browser” is handled by a flag in your browser’s localStorage. The counter collects no personal data.</p>
+        <h4>9. Children’s data</h4>
+        <p>EclipseAV is not intended for persons under 16, and we do not knowingly collect children’s data.</p>
+        <h4>10. Your rights</h4>
+        <p>Because data is stored locally, you fully control it: at any time you can delete saved passwords, clear scan history, or remove the program together with all its data.</p>
+        <h4>11. Changes to this policy</h4>
+        <p>We may update this policy. The current version is always published on this page with the update date. We will note significant changes in the version notes or in the program.</p>
+        <h4>12. Contact</h4>
+        <p>Privacy questions: <b>eclipseav.store@gmail.com</b>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var ECLIPSE_URL = "https://github.com/lev985/antivirus-eclipse-download-beta-2/raw/main/Eclipse.zip";
+  var VERS = {
+    alpha: { url:"https://github.com/lev985/EclipseAV-Alpha-/releases/download/EclipseAv/EclipseAV.Alpha.zip",
+             file:"EclipseAV Alpha.zip", size_ru:"~81 МБ", size_en:"~81 MB",
+             lab_ru:"Альфа", lab_en:"Alpha", w_ru:"альфа", w_en:"alpha", isAlpha:true },
+    beta:  { url:ECLIPSE_URL, file:"Eclipse.zip", size_ru:"~22 МБ", size_en:"~22 MB",
+             lab_ru:"Бета", lab_en:"Beta", w_ru:"бета", w_en:"beta", isAlpha:false }
+  };
+  var curVer = 'alpha';
+
+  var T = {
+    ru:{
+      nav_dl:"Скачать",
+      gh_tip:"Посмотреть исходный код",
+      hero_h1:"Высококлассные проекты в разработке",
+      hero_p:"Программы для Windows, написанные с нуля — без готовых движков и чужих ядер. Первый проект уже можно скачать и попробовать.",
+      hero_btn:"Скачать EclipseAV", hero_btn2:"Что это за проект",
+      pr_kick:"Проект · Антивирус", pr_h:"EclipseAV",
+      pr_cap:"Экран EclipseAV Alpha",
+      st_kick:"Нейросеть", st_h:"Обучена на настоящих вирусах",
+      st_p:"Модель переобучена на публичном наборе данных EMBER2024 — это реальные образцы вредоносных программ 2024 года, а не выдуманные примеры.",
+      st1_t:"файлов в обучении",
+      st1_d:"37 661 вредоносный и 32 801 безопасный файл — 32-битные, 64-битные и специально «маскирующиеся» вирусы.",
+      st2_t:"вирусов распознаёт",
+      st2_d:"На проверочном наборе, который модель никогда не видела при обучении. Маскирующиеся вирусы — 74%.",
+      st3_t:"ложных срабатываний",
+      st3_d:"Ни одна из 200 проверенных обычных программ не была помечена вирусом.",
+      st_note:"<b>Честно:</b> это результаты моих собственных проверок, а не независимой лаборатории. EclipseAV пока в разработке и не заменяет профессиональный антивирус.",
+      f_kick:"Возможности", f_h:"Что уже работает",
+      f1_t:"Защита в реальном времени", f1_d:"Следит за файлами и программами, пока вы работаете, и останавливает подозрительное сразу.",
+      f2_t:"Проверка нейросетью", f2_d:"Любая проверка дополнительно проходит через нейросеть — она узнаёт вирусы, которых нет в базах.",
+      f3_t:"Менеджер паролей", f3_d:"Хранилище с шифрованием AES-256 и одним мастер-паролем. Всё остаётся на вашем компьютере.",
+      f4_t:"Камера и микрофон", f4_d:"Показывает, какая программа включила камеру или микрофон, и даёт закрыть ей доступ.",
+      f5_t:"Защищённый DNS", f5_d:"Шифрует запросы к сайтам через Cloudflare, чтобы провайдер не видел, куда вы заходите.",
+      f6_t:"Блокировка рекламы и уборка", f6_d:"Убирает рекламные баннеры на сайтах и чистит мусорные файлы с подробным отчётом.",
+      dl_h:"Скачать EclipseAV", dl_sub:"Бесплатно, для Windows 10 и 11.",
+      dl_m1:"Версия", dl_m2:"Размер", dl_m3:"Бесплатно",
+      c_v:"посетили", c_d:"скачали",
+      alpha_diff:"Альфа — свежая версия с полной нейросетью (весит больше). Бета — лёгкая и стабильная, но распознаёт хуже.",
+      dl_warn:"Windows может предупредить при запуске: программа пока без цифровой подписи. Нажмите <b>«Подробнее»</b> → <b>«Выполнить в любом случае»</b>.",
+      dl_help:"Не понял? Показать инструкцию",
+      ai_t:"ИИ-помощник — по желанию",
+      ai_d:"Чтобы в EclipseAV работал чат с ИИ, установите бесплатную программу Ollama. Она работает офлайн, прямо на вашем компьютере. Без неё антивирус работает полностью.",
+      ai_b:"Скачать Ollama",
+      lg_h:"Пользовательское соглашение",
+      lg1:"EclipseAV распространяется бесплатно и предоставляется «как есть», без гарантий.",
+      lg2:"Программа находится в разработке и не заменяет профессиональный антивирус.",
+      lg3:"Автор не несёт ответственности за возможную потерю данных — делайте резервные копии.",
+      lg4:"Устанавливая программу, вы соглашаетесь с этими условиями.",
+      priv_link:"Политика конфиденциальности",
+      md_h:"Перед скачиванием", md_sub:"Пара честных слов — и файл ваш.",
+      md_ag:"Я понимаю, что программа в разработке, распространяется «как есть» и не заменяет профессиональный антивирус. Я прочитал",
+      md_pol:"политику конфиденциальности",
+      in_h:"Как установить EclipseAV",
+      in1:"Нажмите «Скачать» и сохраните архив.",
+      in2:"Откройте папку «Загрузки», нажмите на архив правой кнопкой → «Извлечь всё».",
+      in3:"Зайдите в распакованную папку и запустите <b>Eclipse.exe</b>.",
+      in4:"Если Windows покажет синее окно — нажмите «Подробнее» → «Выполнить в любом случае». Это потому, что у программы пока нет платной цифровой подписи.",
+      in5:"Готово: EclipseAV откроется и начнёт защищать компьютер."
+    },
+    en:{
+      nav_dl:"Download",
+      gh_tip:"View source code",
+      hero_h1:"High-class projects in development",
+      hero_p:"Windows software built from scratch — no ready-made engines, no borrowed cores. The first project is already available to try.",
+      hero_btn:"Download EclipseAV", hero_btn2:"About the project",
+      pr_kick:"Project · Antivirus", pr_h:"EclipseAV",
+      pr_cap:"EclipseAV Alpha screen",
+      st_kick:"Neural network", st_h:"Trained on real malware",
+      st_p:"The model was retrained on the public EMBER2024 dataset — real malware samples from 2024, not made-up examples.",
+      st1_t:"files in training",
+      st1_d:"37,661 malicious and 32,801 safe files — 32-bit, 64-bit and deliberately evasive malware.",
+      st2_t:"of malware detected",
+      st2_d:"On a held-out test set the model never saw during training. Evasive malware: 74%.",
+      st3_t:"false positives",
+      st3_d:"None of the 200 ordinary programs tested were flagged as malicious.",
+      st_note:"<b>Honestly:</b> these are my own test results, not an independent lab. EclipseAV is still in development and does not replace a professional antivirus.",
+      f_kick:"Features", f_h:"What already works",
+      f1_t:"Real-time protection", f1_d:"Watches files and programs while you work and stops anything suspicious right away.",
+      f2_t:"Neural network scanning", f2_d:"Every scan also goes through the neural network — it recognises malware that is in no database.",
+      f3_t:"Password manager", f3_d:"AES-256 encrypted vault with a single master password. Everything stays on your computer.",
+      f4_t:"Camera and microphone", f4_d:"Shows which program turned on your camera or microphone and lets you cut its access.",
+      f5_t:"Encrypted DNS", f5_d:"Encrypts site lookups through Cloudflare so your provider cannot see where you go.",
+      f6_t:"Ad blocking and cleanup", f6_d:"Removes ad banners on sites and clears junk files with a detailed report.",
+      dl_h:"Download EclipseAV", dl_sub:"Free, for Windows 10 and 11.",
+      dl_m1:"Version", dl_m2:"Size", dl_m3:"Free",
+      c_v:"visited", c_d:"downloaded",
+      alpha_diff:"Alpha — the newest build with the full neural network (bigger download). Beta — light and stable, but detects less.",
+      dl_warn:"Windows may warn you on launch: the program has no code-signing certificate yet. Click <b>More info</b> → <b>Run anyway</b>.",
+      dl_help:"Need help? Show instructions",
+      ai_t:"AI assistant — optional",
+      ai_d:"To use the AI chat inside EclipseAV, install the free Ollama app. It runs offline, right on your computer. Without it the antivirus still works fully.",
+      ai_b:"Download Ollama",
+      lg_h:"Terms of use",
+      lg1:"EclipseAV is free and provided “as is”, without warranties.",
+      lg2:"The program is in development and does not replace a professional antivirus.",
+      lg3:"The author is not liable for possible data loss — keep backups.",
+      lg4:"By installing the program you accept these terms.",
+      priv_link:"Privacy policy",
+      md_h:"Before you download", md_sub:"A couple of honest words — then it is yours.",
+      md_ag:"I understand the program is in development, provided “as is”, and does not replace a professional antivirus. I have read the",
+      md_pol:"privacy policy",
+      in_h:"How to install EclipseAV",
+      in1:"Click Download and save the archive.",
+      in2:"Open your Downloads folder, right-click the archive → “Extract All”.",
+      in3:"Open the extracted folder and run <b>Eclipse.exe</b>.",
+      in4:"If Windows shows a blue window — click “More info” → “Run anyway”. That is because the program has no paid code-signing certificate yet.",
+      in5:"Done: EclipseAV opens and starts protecting your computer."
+    }
+  };
+
+  function setLang(l){
+    document.documentElement.lang = l;
+    var d = T[l] || T.ru;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var k = el.getAttribute('data-i18n');
+      if(d[k] !== undefined) el.innerHTML = d[k];
+    });
+    document.getElementById('lru').classList.toggle('active', l === 'ru');
+    document.getElementById('len').classList.toggle('active', l === 'en');
+    try{ localStorage.setItem('eclipseav_lang', l); }catch(e){}
+    applyVersion();
+  }
+
+  function applyVersion(){
+    var v = VERS[curVer], en = (document.documentElement.lang === 'en');
+    document.getElementById('verLabel').textContent = en ? v.lab_en : v.lab_ru;
+    document.getElementById('mVer').textContent  = en ? v.w_en : v.w_ru;
+    document.getElementById('mSize').textContent = en ? v.size_en : v.size_ru;
+    document.getElementById('dlBtnText').textContent = (en ? "Download " : "Скачать ") + v.file;
+    document.getElementById('dlConfirmText').textContent = (en ? "Download " : "Скачать ") + v.file;
+    document.getElementById('alphaDiff').hidden = !v.isAlpha;
+    document.getElementById('vopt_alpha').classList.toggle('on', curVer === 'alpha');
+    document.getElementById('vopt_beta').classList.toggle('on', curVer === 'beta');
+    document.getElementById('vopt_alpha').textContent = en ? VERS.alpha.lab_en : VERS.alpha.lab_ru;
+    document.getElementById('vopt_beta').textContent  = en ? VERS.beta.lab_en  : VERS.beta.lab_ru;
+  }
+  function toggleVer(){ var m = document.getElementById('verMenu'); m.hidden = !m.hidden; }
+  function pickVer(v){ curVer = v; document.getElementById('verMenu').hidden = true; applyVersion(); }
+  document.addEventListener('click', function(e){
+    var p = document.querySelector('.verpick');
+    if(p && !p.contains(e.target)) document.getElementById('verMenu').hidden = true;
+  });
+
+  function openDl(){ document.getElementById('dlModal').hidden = false; }
+  function closeDl(){ document.getElementById('dlModal').hidden = true; }
+  function openIns(){ document.getElementById('insModal').hidden = false; }
+  function closeIns(){ document.getElementById('insModal').hidden = true; }
+  function openPriv(){
+    var en = (document.documentElement.lang === 'en');
+    var ru = document.getElementById('polRu'), eng = document.getElementById('polEn');
+    if(ru && eng){ ru.hidden = en; eng.hidden = !en; }
+    document.getElementById('privModal').hidden = false;
+  }
+  function closePriv(){ document.getElementById('privModal').hidden = true; }
+  document.getElementById('agree').addEventListener('change', function(){
+    document.getElementById('dlConfirm').disabled = !this.checked;
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ closeDl(); closeIns(); closePriv(); }
+  });
+  document.querySelectorAll('.overlay').forEach(function(o){
+    o.addEventListener('click', function(e){ if(e.target === o) o.hidden = true; });
+  });
+
+  function doDownload(){
+    var v = VERS[curVer];
+    var a = document.createElement('a');
+    a.href = v.url; a.download = v.file; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    countDownload();
+    closeDl();
+  }
+
+  // ===== счётчики (Abacus) =====
+  var CNT = "https://abacus.jasoncameron.dev";
+  var NS  = "eclipseav-dl-a4f9c2";
+  function cntSet(id, n){
+    var el = document.getElementById(id);
+    if(el && typeof n === 'number') el.textContent = n.toLocaleString('ru-RU');
+  }
+  function cntGet(key, id){
+    fetch(CNT + "/get/" + NS + "/" + key).then(function(r){ return r.json(); })
+      .then(function(d){ if(d) cntSet(id, d.value); }).catch(function(){});
+  }
+  function cntHitOnce(key, id, flag){
+    var seen = false;
+    try{ seen = !!localStorage.getItem(flag); }catch(e){}
+    if(seen){ cntGet(key, id); return; }
+    fetch(CNT + "/hit/" + NS + "/" + key).then(function(r){ return r.json(); })
+      .then(function(d){ try{ localStorage.setItem(flag,'1'); }catch(e){} if(d) cntSet(id, d.value); })
+      .catch(function(){ cntGet(key, id); });
+  }
+  function countDownload(){ cntHitOnce("count", "dlCount", "eclipseav_dl_v1"); }
+
+  // ===== старт =====
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  var saved = 'ru';
+  try{ saved = localStorage.getItem('eclipseav_lang') || 'ru'; }catch(e){}
+  setLang(saved);
+  cntHitOnce("views", "viewCount", "eclipseav_visit_v1");
+  cntGet("count", "dlCount");
+</script>
